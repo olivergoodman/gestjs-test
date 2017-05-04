@@ -1,9 +1,6 @@
 $(document).ready(function() {
 	gest.options.debug(true); //show gesture video feed
 
-	// gest.options.skinFilter(true); 
-	console.log(gest.options)
-
 	var slide = document.getElementById('gest-slider'),
 	    sliderText = document.getElementById("gest-sensitivity");
 
@@ -35,13 +32,16 @@ $(document).ready(function() {
 		});	
 	});
 
-	$("#skin-on").click(function() {
-		gest.options.skinFilter(true);
-	})
+	// toggle controls for skin filtering
+	$(".toggle").prop('checked', false).change();
 
-	$("#skin-off").click(function() {
-		gest.options.skinFilter(false);
-	})
+	$('#toggle-skin-filter').change(function() {
+		if ($(this).prop('checked')){
+			gest.options.skinFilter(true); 
+		} else {
+			gest.options.skinFilter(false); 
+		}
+	});
 
 
 	

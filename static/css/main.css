@@ -15,5 +15,19 @@ video {
   position: absolute;
 }
 
+.controls {
+	display: inline-block;
+	width: 33%;
+}
+
+.toggle {
+	width: 80px !important;
+	height: 30px !important;
+}
+
+#toggle-skin-filter {
+	font-size: 100px;
+}
+
 
 

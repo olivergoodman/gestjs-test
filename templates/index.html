@@ -18,27 +18,33 @@
 
    <!-- Latest compiled and minified JavaScript -->
    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+   <!-- Bootstrap toggle -->
+   <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+   <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 	
 </head>
 
 
 <body>
-	<h3>Testing gest.js</h3>
-	<button id="gest-start">Start</button>
-	<button id="gest-stop">Stop</button>
-	<p></p>
-	<button id="skin-on">Skin Filter On</button>
-	<button id="skin-off">Skin Filter Off</button>
+	<h2>Testing gest.js</h2>
+	<div class="controls">
+		<button class="btn-success btn-lg" id="gest-start">Start</button>
+		<button class="btn-danger btn-lg" id="gest-stop">Stop</button>	
+	</div>
+	
+	<div class="controls"> 
+		<h4>Gesture Sensitivity: <span id="gest-sensitivity">80</span></h4>
+		<input type="range" id="gest-slider" min="0" max="100" value="80" style="width: 200px"/>
+	</div>
 
-	<h5>Gesture Sensitivity: <span id="gest-sensitivity">80</span></h5>
-	<input type="range" id="gest-slider" min="0" max="100" value="80" style="width: 200px"/>
-
-	<!-- <label class="checkbox-inline">
-	  <input type="checkbox" checked data-toggle="toggle"> First
-	</label> -->
-
-
-	<h5>Direction: <span id="direction-log"></span></h5>
+	<div class="controls">
+		<label class="checkbox-inline">
+		  <input type="checkbox" checked data-toggle="toggle" id="toggle-skin-filter"> Skin Filter
+		</label>
+	</div>
+	<p>tests</p>
+	<h3>Direction: <span id="direction-log"></span></h3>
 
 
 
