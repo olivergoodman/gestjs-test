@@ -1,6 +1,8 @@
 $(document).ready(function() {
 	gest.options.debug(true); //show gesture video feed
 
+	// gest.options.skinFilter(true); 
+	console.log(gest.options)
 
 	var slide = document.getElementById('gest-slider'),
 	    sliderText = document.getElementById("gest-sensitivity");
@@ -33,10 +35,14 @@ $(document).ready(function() {
 		});	
 	});
 
-	$("#gest-stop").click(function() {
-		gest.stop();
-	});
-	
+	$("#skin-on").click(function() {
+		gest.options.skinFilter(true);
+	})
+
+	$("#skin-off").click(function() {
+		gest.options.skinFilter(false);
+	})
+
 
 	
 
