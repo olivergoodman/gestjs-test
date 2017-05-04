@@ -6,7 +6,7 @@
 	<meta name="mobile-web-app-capable" content="yes">
 	<meta id="theme-color" name="theme-color" content="#fff">
 	<base target="_blank">
-	<title>Gest.js test</title>
+	<title>Gesture Recognition</title>
 	<!-- style -->
 	<link rel="stylesheet" type="text/css" href="../static/css/main.css">
 	<!-- js -->
@@ -27,15 +27,19 @@
 
 
 <body>
-	<h2>Testing gest.js</h2>
+	<h2>Gesture Recognition</h2>
+	<hr>
 	<div class="controls">
 		<button class="btn-success btn-lg" id="gest-start">Start</button>
 		<button class="btn-danger btn-lg" id="gest-stop">Stop</button>	
 	</div>
 	
 	<div class="controls"> 
-		<h4>Gesture Sensitivity: <span id="gest-sensitivity">80</span></h4>
-		<input type="range" id="gest-slider" min="0" max="100" value="80" style="width: 200px"/>
+		<!-- <h4>Gesture Sensitivity: <span id="gest-sensitivity">80</span></h4> -->
+		<label>
+		<input type="range" id="gest-slider" min="0" max="100" value="80" style="width: 200px"/> Gesture Sensitivity: <span id="gest-sensitivity">80</span></h4>
+		</label>
+		
 	</div>
 
 	<div class="controls">
@@ -43,7 +47,6 @@
 		  <input type="checkbox" checked data-toggle="toggle" id="toggle-skin-filter"> Skin Filter
 		</label>
 	</div>
-	<p>tests</p>
 	<h3>Direction: <span id="direction-log"></span></h3>
 
 

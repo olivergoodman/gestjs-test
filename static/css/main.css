@@ -1,23 +1,29 @@
 
 body {
-  font-family: sans-serif;
-  margin: 0;
-  padding: 1em;
+    font-family: sans-serif;
+    margin: 0;
+    padding: 1em;
+}
+
+button {
+    outline:none;
 }
 
 canvas {
-  max-width: 50%;
-  width: 50%;
-  position: relative !important;
+    max-width: 50%;
+    width: 50%;
+    position: relative !important;
 }
 
 video {
-  position: absolute;
+    position: absolute;
 }
 
 .controls {
 	display: inline-block;
 	width: 33%;
+    vertical-align: top;
+    text-align: center;
 }
 
 .toggle {
@@ -29,5 +35,8 @@ video {
 	font-size: 100px;
 }
 
+#direction-log {
+    color: blue;
+}
 
 
