@@ -1,31 +1,97 @@
 $(document).ready(function() {
-	gest.options.debug(true); //show gesture video feed
 
-	var prediction = new GesturePrediction("left", [], false, "gest.js");
-	var actual = new GestureActual("right", [], false, "src");
+	
+	/*
+	* ----------------------------------------------------------------------------------------------------------------------------------
+	* ----------------------------------------------------------------------------------------------------------------------------------
+	* Gesture Objects 
+	* ----------------------------------------------------------------------------------------------------------------------------------
+	* ----------------------------------------------------------------------------------------------------------------------------------
+	*/
 
-	console.log(prediction.test());
+	///// Prediction class
+	function GesturePrediction(direction, session_log, sensitivity, skin_filter, timestamp) {
+		this.direction = direction;
+		this.session_log = session_log;
+		this.sensitivity = sensitivity;
+		this.skin_filter = skin_filter;
+		this.timestamp = timestamp;
+	}
+
+	GesturePrediction.prototype.test = function() {
+		return this.direction;
+	}
+
+	///// Actual class
+	function GestureActual(direction, session_log, timestamp) {
+		this.direction = direction;
+		this.session_log = session_log;
+		this.timestamp = timestamp;
+	}
+
+	GestureActual.prototype.test = function() {
+		return this.direction;
+	}
+
+	/*
+	* ----------------------------------------------------------------------------------------------------------------------------------
+	* ----------------------------------------------------------------------------------------------------------------------------------
+	* Generate GestureActual objects to be predicted  
+	* ----------------------------------------------------------------------------------------------------------------------------------
+	* ----------------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	const UP = 0;
+	const LEFT = 1;
+	const RIGHT = 2;
+	const DOWN = 3;
+
+	// create a new gesture object to be generated
+	function generateGesture() {
+		console.log('not implemented yet');
+		return false;
+	}
+
+	function displayGesture() {
+		console.log('not implemented yet');
+		return false;
+	}
+
+	/*
+	* ----------------------------------------------------------------------------------------------------------------------------------
+	* ----------------------------------------------------------------------------------------------------------------------------------
+	* UI Controls
+	* ----------------------------------------------------------------------------------------------------------------------------------
+	* ----------------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	var prediction = new GesturePrediction("left", [], 80, false, 3);
+	var actual = new GestureActual("right", [], 3);
+	console.log(prediction);
 	console.log(actual);
 
+
+	gest.options.debug(true); //show gesture video feed
 
 	// start gesture recording
 	$("#gest-start").click(function() {
 		gest.start();
 		gest.options.subscribeWithCallback(function(gesture) {
 			$("#direction-log")[0].innerHTML = gesture.direction;
+			console.log(gesture.direction);
 
 			// can handle individual directions:
-		    if (gesture.up) {
-		    	console.log(gesture.direction);
-		    } else if (gesture.down) {
-		    	console.log(gesture.direction);
-		    } else if (gesture.left) {
-		    	console.log(gesture.direction);
-		    } else if (gesture.right) {
-		    	console.log(gesture.direction);
-		    } else {
-		    	console.log(gesture.error);
-		    }
+		    // if (gesture.up) {
+		    // 	console.log(gesture.direction);
+		    // } else if (gesture.down) {
+		    // 	console.log(gesture.direction);
+		    // } else if (gesture.left) {
+		    // 	console.log(gesture.direction);
+		    // } else if (gesture.right) {
+		    // 	console.log(gesture.direction);
+		    // } else {
+		    // 	console.log(gesture.error);
+		    // }
 		});	
 	});
 
@@ -52,58 +118,7 @@ $(document).ready(function() {
 	    gest.options.sensitivity(slide.valueAsNumber);
 	}
 
-	
-	/*
-	* ----------------------------------------------------------------------------------------------------------------------------------
-	* ----------------------------------------------------------------------------------------------------------------------------------
-	* Creating the Gesture Object Prototype and it's children
-	* ----------------------------------------------------------------------------------------------------------------------------------
-	* ----------------------------------------------------------------------------------------------------------------------------------
-	*/
 
-	// Function to create inheritance between parent and child classes
-	function inheritPrototype(childObject, parentObject) {
-		// As discussed above, we use the Crockford’s method to copy the properties and methods from the parentObject onto the childObject​
-		// So the copyOfParent object now has everything the parentObject has ​
-		var copyOfParent = Object.create(parentObject.prototype);
-
-		//Then we set the constructor of this new object to point to the childObject.​
-		// Why do we manually set the copyOfParent constructor here, see the explanation immediately following this code block.​
-		copyOfParent.constructor = childObject;
-
-		// Then we set the childObject prototype to copyOfParent, so that the childObject can in turn inherit everything from copyOfParent (from parentObject)​
-		childObject.prototype = copyOfParent;
-	}
-
-	///// Parent GestureObject class
-	function GestureObject(direction, session_log, visible, source) {
-		this.direction = direction;
-		this.session_log = session_log;
-		this.visible = visible;
-		this.source = source;
-	}
-
-	///// GesturePrediction, child of Gesture Object
-	function GesturePrediction(direction, session_log, visible, source) {
-		GestureObject.call(this, direction, session_log, visible, source);
-	}
-	// inherit GestureObject
-	inheritPrototype(GesturePrediction, GestureObject);
-
-	GesturePrediction.prototype.test = function() {
-		return this.direction;
-	}
-
-	///// GestureActual, child of Gesture Object
-	function GestureActual(direction, session_log, visible, source) {
-		GestureObject.call(this, direction, session_log, visible, source);
-	}
-	// inherit GestureObject
-	inheritPrototype(GestureActual, GestureObject);
-
-	GestureActual.prototype.test2 = function() {
-		return this.direction;
-	}
 
 
 });

@@ -10,9 +10,11 @@ button {
 }
 
 canvas {
-    max-width: 50%;
-    width: 50%;
+    max-width: 40%;
     position: relative !important;
+    border: 5px solid black;
+    display: inline-block;
+    float: right;
 }
 
 video {
@@ -37,6 +39,56 @@ video {
 
 #direction-log {
     color: blue;
+}
+
+#arrows {
+    display: inline-block;
+    width: 50px;
+}
+
+#arrow-up {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 50px 50px 50px;
+    border-color: transparent transparent #007bff transparent;
+}
+
+#arrow-left {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 50px 50px 50px 0;
+    border-color: transparent #007bff transparent transparent;
+    display: inline-block;
+    float: left;
+}
+
+#arrow-right {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 50px 0 50px 50px;
+    border-color: transparent transparent transparent #eeff00;
+    display: inline-block;
+    float: right;
+}
+
+#arrow-down {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 50px 50px 0 50px;
+    border-color: #007bff transparent transparent transparent;
+}
+
+#middle-arrows {
+    display: inline-block;
+    width: 200px;
+}
+
+.top-arrows {
+    margin-left: 50px;
 }
 
 
