@@ -1,6 +1,4 @@
 $(document).ready(function() {
-
-	
 	/*
 	* ----------------------------------------------------------------------------------------------------------------------------------
 	* ----------------------------------------------------------------------------------------------------------------------------------
@@ -41,20 +39,51 @@ $(document).ready(function() {
 	* ----------------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	const UP = 0;
-	const LEFT = 1;
-	const RIGHT = 2;
-	const DOWN = 3;
 
 	// create a new gesture object to be generated
-	function generateGesture() {
-		console.log('not implemented yet');
-		return false;
+	function generateGesture(actual_gesture) {
+		var random_direction = Math.floor(Math.random() * 4) + 1;
+		var dir;
+
+		if (random_direction === 1) {
+			$("#arrow-up").addClass("arrow-up-highlight");
+			dir = "up";
+		} else if (random_direction === 2) {
+			$("#arrow-left").addClass("arrow-left-highlight");
+			dir = "left";
+		} else if (random_direction === 3) {
+			$("#arrow-right").addClass("arrow-right-highlight");
+			dir = "right";
+		} else if (random_direction === 4) {
+			$("#arrow-down").addClass("arrow-down-highlight");
+			dir = "down";
+		}
+
+		var current_gesture = {
+			direction: dir, 
+			timestamp: actual_gesture.timestamp
+		};
+		
+		actual_gesture.session_log.push(current_gesture);
+		actual_gesture.direction = dir;
+
+
 	}
 
-	function displayGesture() {
-		console.log('not implemented yet');
-		return false;
+	function removeHighlights() {
+		$("#arrow-up").removeClass("arrow-up-highlight");
+		$("#arrow-left").removeClass("arrow-left-highlight");
+		$("#arrow-right").removeClass("arrow-right-highlight");
+		$("#arrow-down").removeClass("arrow-down-highlight");
+	}
+
+	function recordPredictedGesture(predicted_gesture, read_gesture) {
+		var read = {
+			direction: read_gesture.direction,
+			timestamp: read_gesture.timestamp
+		}
+		predicted_gesture.session_log.push(read);
+		predicted_gesture.direction = read_gesture.direction;
 	}
 
 	/*
@@ -63,22 +92,48 @@ $(document).ready(function() {
 	* UI Controls
 	* ----------------------------------------------------------------------------------------------------------------------------------
 	* ----------------------------------------------------------------------------------------------------------------------------------
-	*/
+	*/	
 
-	var prediction = new GesturePrediction("left", [], 80, false, 3);
-	var actual = new GestureActual("right", [], 3);
-	console.log(prediction);
-	console.log(actual);
+	//Globals
+	var RECORDING = false;
+
+	// testing
+	var PREDICTION = new GesturePrediction("none", [], 80, false, 3);
+	var ACTUAL = new GestureActual("none", [], 3);
+	var COUNT = 0;
+
+	//testing make-gesture
+	$("#make-gesture").click(function() {
+		removeHighlights();
+		generateGesture(ACTUAL);
+		// console.log(ACTUAL)
+	});
 
 
 	gest.options.debug(true); //show gesture video feed
-
 	// start gesture recording
 	$("#gest-start").click(function() {
+		recording = true;
 		gest.start();
+
+		// make the first gesture to be read
+		generateGesture(ACTUAL);
+
+		// read incoming read gestures
 		gest.options.subscribeWithCallback(function(gesture) {
+			console.log(COUNT);
+		
+			removeHighlights();
+			generateGesture(ACTUAL);
+			recordPredictedGesture(PREDICTION, gesture);
 			$("#direction-log")[0].innerHTML = gesture.direction;
-			console.log(gesture.direction);
+			$("#count-log")[0].innerHTML = COUNT;
+
+			console.log("actual: ", ACTUAL);
+			console.log("read: ", PREDICTION)
+
+			COUNT++;
+
 
 			// can handle individual directions:
 		    // if (gesture.up) {
@@ -97,6 +152,7 @@ $(document).ready(function() {
 
 	// stop gesture recording
 	$("#gest-stop").click(function() {
+		recording = false;
 		gest.stop();
 	})
 
@@ -117,8 +173,6 @@ $(document).ready(function() {
 	    sliderText.innerHTML = this.value;
 	    gest.options.sensitivity(slide.valueAsNumber);
 	}
-
-
 
 
 });

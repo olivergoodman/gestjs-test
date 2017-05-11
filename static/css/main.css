@@ -13,12 +13,13 @@ canvas {
     max-width: 40%;
     position: relative !important;
     border: 5px solid black;
-    display: inline-block;
+    /*display: inline-block !important;*/
     float: right;
+    top: -20em !important;
 }
 
 video {
-    position: absolute;
+    /*position: absolute;*/
 }
 
 .controls {
@@ -37,13 +38,21 @@ video {
 	font-size: 100px;
 }
 
-#direction-log {
+#direction-log, #count-log {
     color: blue;
 }
 
+#direction-title, #count-title {
+    display: block;
+    padding-right: 10em;
+}
+
+#
+
 #arrows {
     display: inline-block;
-    width: 50px;
+    /*width: 25%;*/
+    /*padding-left: 25%;*/
 }
 
 #arrow-up {
@@ -69,7 +78,7 @@ video {
     height: 0;
     border-style: solid;
     border-width: 50px 0 50px 50px;
-    border-color: transparent transparent transparent #eeff00;
+    border-color: transparent transparent transparent #007bff;
     display: inline-block;
     float: right;
 }
@@ -91,4 +100,18 @@ video {
     margin-left: 50px;
 }
 
+.arrow-up-highlight {
+    border-color: transparent transparent #eeff00 transparent !important;
+}
 
+.arrow-left-highlight {
+    border-color: transparent #eeff00 transparent transparent !important;
+}
+
+.arrow-right-highlight {
+    border-color: transparent transparent transparent #eeff00 !important;
+}
+
+.arrow-down-highlight {
+    border-color: #eeff00 transparent transparent transparent !important;
+}
