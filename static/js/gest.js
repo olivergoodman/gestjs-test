@@ -599,7 +599,11 @@ window.gest = (function (window) {
 	gest.prototype.stop = function () {
 		if (!gestIsInitialised || !userHasAskedToStart) { return false; }
 
-		if (video) { video.src = ''; }
+		if (video) { 
+			// delete gest;
+			video.src = ''; 
+		}
+
 		return !!stream.stop();
 	};
 

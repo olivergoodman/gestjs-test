@@ -7,28 +7,31 @@ $(document).ready(function() {
 	* ----------------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	///// Prediction class
-	function GesturePrediction(direction, session_log, sensitivity, skin_filter, timestamp) {
+	///// Predicted gesture class
+	function GesturePrediction(direction, sensitivity, skin_filter, timestamp, count) {
 		this.direction = direction;
-		this.session_log = session_log;
 		this.sensitivity = sensitivity;
 		this.skin_filter = skin_filter;
 		this.timestamp = timestamp;
+		this.count = count;
 	}
 
 	GesturePrediction.prototype.test = function() {
 		return this.direction;
 	}
 
-	///// Actual class
-	function GestureActual(direction, session_log, timestamp) {
+	///// Actual gesture class
+	function GestureActual(direction, timestamp, count) {
 		this.direction = direction;
-		this.session_log = session_log;
 		this.timestamp = timestamp;
+		this.count = count;
 	}
 
-	GestureActual.prototype.test = function() {
-		return this.direction;
+	///// Class to keep track of last direction / log of session's directions
+	function GestureLog(name, direction, session_log) {
+		this.name = name;
+		this.direction = direction;
+		this.session_log = session_log;
 	}
 
 	/*
@@ -41,35 +44,33 @@ $(document).ready(function() {
 
 
 	// create a new gesture object to be generated
-	function generateGesture(actual_gesture) {
+	function generateGesture() {
 		var random_direction = Math.floor(Math.random() * 4) + 1;
 		var dir;
-
 		if (random_direction === 1) {
 			$("#arrow-up").addClass("arrow-up-highlight");
-			dir = "up";
+			dir = "Up";
 		} else if (random_direction === 2) {
 			$("#arrow-left").addClass("arrow-left-highlight");
-			dir = "left";
+			dir = "Left";
 		} else if (random_direction === 3) {
 			$("#arrow-right").addClass("arrow-right-highlight");
-			dir = "right";
+			dir = "Right";
 		} else if (random_direction === 4) {
 			$("#arrow-down").addClass("arrow-down-highlight");
-			dir = "down";
+			dir = "Down";
 		}
-
-		var current_gesture = {
-			direction: dir, 
-			timestamp: actual_gesture.timestamp
-		};
-		
-		actual_gesture.session_log.push(current_gesture);
-		actual_gesture.direction = dir;
-
-
+		return dir;		
 	}
 
+	// store the last actual gesture into the actual log
+	function recordActualGesture(actual_log, direction, timestamp) {
+		var current_gesture = new GestureActual(direction, timestamp, COUNT);
+		actual_log.session_log.push(current_gesture);
+		actual_log.direction = direction;
+	}
+
+	// clear the arrows of any highlighted classes
 	function removeHighlights() {
 		$("#arrow-up").removeClass("arrow-up-highlight");
 		$("#arrow-left").removeClass("arrow-left-highlight");
@@ -77,13 +78,11 @@ $(document).ready(function() {
 		$("#arrow-down").removeClass("arrow-down-highlight");
 	}
 
-	function recordPredictedGesture(predicted_gesture, read_gesture) {
-		var read = {
-			direction: read_gesture.direction,
-			timestamp: read_gesture.timestamp
-		}
-		predicted_gesture.session_log.push(read);
-		predicted_gesture.direction = read_gesture.direction;
+	// store the read gesture from the webcam into the prediction log
+	function recordPredictedGesture(prediction_log, read_gesture, timestamp) {
+		var read = new GesturePrediction(read_gesture.direction, SENSITIVITY, SKIN_FILTER, timestamp, COUNT);
+		prediction_log.session_log.push(read);
+		prediction_log.direction = read_gesture.direction;
 	}
 
 	/*
@@ -94,19 +93,18 @@ $(document).ready(function() {
 	* ----------------------------------------------------------------------------------------------------------------------------------
 	*/	
 
-	//Globals
-	var RECORDING = false;
-
-	// testing
-	var PREDICTION = new GesturePrediction("none", [], 80, false, 3);
-	var ACTUAL = new GestureActual("none", [], 3);
-	var COUNT = 0;
+	// Globals
+	var PREDICTION_LOG = new GestureLog("predictions", "none", []);
+	var ACTUAL_LOG = new GestureLog("actual", "none", []);
+	var COUNT = 1;
+	var SKIN_FILTER = false;
+	var SENSITIVITY = 80;
+	var LAST_READ_ACTUAL = "none";
 
 	//testing make-gesture
 	$("#make-gesture").click(function() {
 		removeHighlights();
-		generateGesture(ACTUAL);
-		// console.log(ACTUAL)
+		generateGesture(ACTUAL_LOG);
 	});
 
 
@@ -117,43 +115,30 @@ $(document).ready(function() {
 		gest.start();
 
 		// make the first gesture to be read
-		generateGesture(ACTUAL);
+		LAST_READ_ACTUAL = generateGesture(ACTUAL_LOG);
+		var start_time = new Date().getTime();
 
 		// read incoming read gestures
 		gest.options.subscribeWithCallback(function(gesture) {
-			console.log(COUNT);
-		
 			removeHighlights();
-			generateGesture(ACTUAL);
-			recordPredictedGesture(PREDICTION, gesture);
+			var timestamp = new Date().getTime();
+			recordActualGesture(ACTUAL_LOG, LAST_READ_ACTUAL, start_time);
+			LAST_READ_ACTUAL = generateGesture(ACTUAL_LOG, timestamp);
+			recordPredictedGesture(PREDICTION_LOG, gesture, timestamp);
 			$("#direction-log")[0].innerHTML = gesture.direction;
 			$("#count-log")[0].innerHTML = COUNT;
-
-			console.log("actual: ", ACTUAL);
-			console.log("read: ", PREDICTION)
-
 			COUNT++;
-
-
-			// can handle individual directions:
-		    // if (gesture.up) {
-		    // 	console.log(gesture.direction);
-		    // } else if (gesture.down) {
-		    // 	console.log(gesture.direction);
-		    // } else if (gesture.left) {
-		    // 	console.log(gesture.direction);
-		    // } else if (gesture.right) {
-		    // 	console.log(gesture.direction);
-		    // } else {
-		    // 	console.log(gesture.error);
-		    // }
 		});	
 	});
 
 	// stop gesture recording
 	$("#gest-stop").click(function() {
+		console.log("actual: ", ACTUAL_LOG);
+		console.log("read: ", PREDICTION_LOG);
 		recording = false;
 		gest.stop();
+
+		
 	})
 
 	// toggle controls for skin filtering
@@ -161,8 +146,10 @@ $(document).ready(function() {
 	$('#toggle-skin-filter').change(function() {
 		if ($(this).prop('checked')){
 			gest.options.skinFilter(true); 
+			SKIN_FILTER = true;
 		} else {
 			gest.options.skinFilter(false); 
+			SKIN_FILTER = false;
 		}
 	});
 
@@ -172,6 +159,7 @@ $(document).ready(function() {
 	slide.onchange = function() {
 	    sliderText.innerHTML = this.value;
 	    gest.options.sensitivity(slide.valueAsNumber);
+	    SENSITIVITY = slide.valueAsNumber;
 	}
 
 
