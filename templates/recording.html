@@ -13,6 +13,7 @@
 	<!-- js -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
 	<script type="text/javascript" src="../static/js/recording.js"></script>
+	<script type="text/javascript" src="../static/js/jszip.min.js"></script>
    <!-- Latest compiled and minified CSS -->
    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
@@ -28,7 +29,6 @@
 
 	<!-- The Modal -->
 	<div id="myModal" class="modal">
-
 	  <!-- Modal content -->
 	  <div class="modal-content">
 	    <span class="close">&times;</span>
@@ -36,9 +36,10 @@
 	    <p>2. Gesture with your hand: <span id="modal-dir"></span></p>
 	    <p>3. Press "Space" again to stop recording</p>
 	  </div>
-
 	</div>
 
+	<video controls autoplay></video>
+	<a id="downloadLink" download="mediarecorder.webm" name="mediarecorder.webm" href></a>
 
 </body>
 

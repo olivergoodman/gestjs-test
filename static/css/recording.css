@@ -40,3 +40,7 @@
 #modal-dir {
     font-weight: bold;
 }
+
+video {
+    display: none !important;
+}
