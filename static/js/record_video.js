@@ -90,26 +90,21 @@ function startRecording(stream) {
 		var blob = new Blob(chunks, {type: "video/webm"});
 
 		// send video chunks to backend
-		var rand = new Date().getTime();
-		var name  = "video_"+rand+".webm" ;
-		
-		console.log(chunks)
+		var time = new Date().getTime();
+		var name  = "video_"+time+".webm" ;
 
 		var formData = new FormData();
-		formData.append("webm", chunks, name);
+		formData.append("blob", blob);
+		formData.append("name", name);
 		$.ajax({
 		    type: 'POST',
 		    url: '../run.py',
 		    data: formData,
 		    processData: false,  // prevent jQuery from converting the data
 		    contentType: false,  // prevent jQuery from overriding content type
-		    success: function(response) {
-		        console.log(success);
-		    }
 		});
 
 		chunks = [];
-
 
 		var videoURL = window.URL.createObjectURL(blob);
 
