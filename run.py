@@ -22,17 +22,18 @@ class ServerHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 			         'CONTENT_TYPE':self.headers['Content-Type'],
 			         })
 
-		name = form.getvalue('name')
-		blob = form.getvalue('blob')
-		
-		data = {"name": name, "blob": blob}
-		pickle.dump( data, open("videos/vids.p", "wb") )
+		# get video data
+		if form.getvalue('blob') != None:
+			name = form.getvalue('name')
+			blob = form.getvalue('blob')
+			
+			data = {"name": name, "blob": blob}
+			pickle.dump( data, open("videos/vids.p", "wb") )
 
-		saved_data = pickle.load( open("videos/vids.p", "rb"))
-		new_file = open("videos/"+saved_data["name"], "wb")
-		new_file_bytes = bytearray(saved_data["blob"])
-		new_file.write(new_file_bytes)
-
+			saved_data = pickle.load( open("videos/vids.p", "rb"))
+			new_file = open("videos/"+saved_data["name"], "wb")
+			new_file_bytes = bytearray(saved_data["blob"])
+			new_file.write(new_file_bytes)
 
 		SimpleHTTPServer.SimpleHTTPRequestHandler.do_GET(self)
 
